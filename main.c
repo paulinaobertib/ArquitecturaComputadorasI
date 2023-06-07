@@ -2,11 +2,15 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <string.h>
+#include <stdint.h> //libreria para usar el uint8_t 
+#include <windows.h> //libreria para usar las teclas de flechas
 
 //funciones pedidas
 void retardo(unsigned long int);
 void mostrar(unsigned char);
 void autoFantastico(unsigned long int);
+void carrera(unsigned long int);
+void choque(unsigned long int);
 
 int main() {
 	//en c se pone la cantidad que queremos + 1 porque el ultimo es un espacio vacio
@@ -179,5 +183,47 @@ void autoFantastico(unsigned long int speed) {
 		}
 	}
 }
+
+void choque(unsigned long int speed) {//Esto define la función choque que toma un parámetro "speed" de tipo "unsigned long int".
+    
+	  
+  // Se define un arreglo llamado "tabla" que contiene una secuencia de valores en formato hexadecimal. 
+  //Estos valores representan los patrones de luces que se mostrarán durante el efecto de choque.
+
+	uint8_t tabla[] = {
+        0x81, 0x42, 0x24, 0x18, 0x18, 0x24, 0x42
+    };
+
+    while (1) { //Esto inicia un bucle infinito que controla la ejecución del efecto de choque. 
+				//El bucle se repetirá continuamente hasta que se detenga manualmente o se cumpla alguna condición de salida.
+        
+		for (int i = 0; i < 7; ++i) {
+			//itera a través de los elementos del arreglo tabla. 
+			//En cada iteración, se realiza una serie de acciones relacionadas con la visualización del patrón de luz correspondiente.
+            
+			printf("Presione ESC para volver al menu principal\n");
+            printf("Delay: %lu\n", speed); //Imprime el valor actual de speed en la consola, mostrando la velocidad actual del efecto de choque.
+            mostrar(tabla[i]); //Llama a una funcion mostrar.
+            retardo(speed); //Llama a una función retardo. 
+            system("cls"); //Limpia la consola para borrar los patrones de luces anteriores y prepararse para mostrar el siguiente patrón.
+            
+            if ((speed - 5000000) > 1000000) {
+                if (GetAsyncKeyState(VK_UP) & 0x0001) { //flecha hacia arriba
+                    speed -= 5000000; 
+                }
+            }
+            
+            if (GetAsyncKeyState(VK_DOWN) & 0x0001) { //flecha hacia abajo
+                speed += 5000000;
+            }
+            
+            if (GetAsyncKeyState(VK_ESCAPE) & 0x0001) { //tecla escape
+                return;
+            }
+        }
+	}
+}
+}
+
 
 
