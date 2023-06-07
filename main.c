@@ -10,6 +10,7 @@ int main() {
 	char passwords[MAX_ATTEMPTS][PASSWORD_LENGTH + 1]; //para almacenar passwords ingresadas
 	char inputPassword[PASSWORD_LENGTH + 1]; //password ingresada por el usuario
 	int attempt; //para contar los intentos
+	int menuOption; //aca guardamos la opcion elegida por el usuario del menu
 	
 	for (attempt = 0; attempt < MAX_ATTEMPTS; attempt++) { //ciclo for para los intentos de la password
 		printf("Ingrese su password de 5 digitos: "); //printf para mostrar por consola
@@ -49,6 +50,49 @@ int main() {
 	if (attempt == MAX_ATTEMPTS) { //si llegamos a la cantidad maxima de intentos,no hay mas
 		printf("No tienes mas intentos\n");
 	}
+	
+	do {
+		//\n es un salto de linea
+		printf("---- MENU ----\n");
+		printf("1. Auto Fantastico\n");
+		printf("2. Carrera\n");
+		printf("3. Choque\n");
+		printf("4. Elegida1\n");
+		printf("5. Elegida2\n");
+		printf("6. Salir\n");
+		printf("Ingrese una opcion: ");
+		//scanf es para leer la entrada de usuario desde la consola
+		//%d indica el formato de entrada esperado, en este caso un entero
+		//&menuOption para obtener la direccion de memoria de la variable, asi scanf almacena en esa direccion
+		scanf("%d", &menuOption);
+		
+		switch (menuOption) {
+		case 1:
+			printf("Auto Fantastico\n");
+			break;
+		case 2:
+			printf("Carrera\n");
+			break;
+		case 3:
+			printf("Choque\n");
+			break;
+		case 4:
+			printf("Elegida1\n");
+			break;
+		case 5:
+			printf("Elegida2\n");
+			break;
+		case 6:
+			printf("Adios\n");
+			break;
+		default:
+			printf("Has seleccionado una opcion no disponible en el menu, intentalo de nuevo.\n");
+			break;
+		}
+		
+		printf("\n");
+	} while (menuOption != 6);
+	
 	
 	return 0;
 }
