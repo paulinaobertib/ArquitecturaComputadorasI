@@ -5,6 +5,7 @@
 
 //funciones pedidas
 void autoFantastico(unsigned long int);
+void retardo (unsigned long int);
 
 int main() {
 	//en c se pone la cantidad que queremos + 1 porque el ultimo es un espacio vacio
@@ -30,7 +31,7 @@ int main() {
 				printf("*");
 			} else {
 				if (j > 0) {
-					printf("\b \b"); //Al imprimir "\b \b", se muestra un carácter de retroceso (\b) para mover el cursor hacia la izquierda, luego se imprime un espacio en blanco para sobrescribir el último carácter visible y finalmente se emite otro carácter de retroceso para colocar el cursor nuevamente en la posición original.
+					printf("\b \b"); //Al imprimir "\b \b", se muestra un carï¿½cter de retroceso (\b) para mover el cursor hacia la izquierda, luego se imprime un espacio en blanco para sobrescribir el ï¿½ltimo carï¿½cter visible y finalmente se emite otro carï¿½cter de retroceso para colocar el cursor nuevamente en la posiciï¿½n original.
 					j--;
 				}
 			}
@@ -150,6 +151,15 @@ void autoFantastico(unsigned long int speed) {
 			return 0;
 		}
 	}
+}
+
+void retardo(unsigned long int a){ 
+//"unsigned long int" (representa un nÃºmero entero sin signo y generalmente ocupa 4 bytes en la memoria). La funciÃ³n no devuelve ningÃºn valor (void).
+
+	//Bucle de a que se ejecuta siempre que a sea distinto de cero
+	//En cada iteraciÃ³n del bucle, se decrementa el valor de "a" en 1
+    while (a) a--;
+
 }
 
 
