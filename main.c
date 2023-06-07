@@ -108,8 +108,8 @@ void autoFantastico(unsigned long int speed) {
 		for (int i = 0; i < 8; ++i) {
 			printf("Presione ESC para volver al menu principal\n");
 			printf("Delay: %d\n", speed);
-			mostrar(dato);
-			dato >>= 1; //se desplaza el bit de dato un valor a la derecha
+			mostrar(data);
+			data >>= 1; //se desplaza el bit de dato un valor a la derecha
 			retardo(speed);
 			system("cls"); //limpia la consola
 			
@@ -120,7 +120,7 @@ void autoFantastico(unsigned long int speed) {
 				}
 			}
 			
-			if (GetAsyncKeyState(VK_DOWN) & 0x0001) {
+			if (GetAsyncKeyState(VK_DOWN) & 0x0001) {//esta es la de la tecla para abajo
 				speed += 5000000;
 			}
 			
@@ -129,11 +129,15 @@ void autoFantastico(unsigned long int speed) {
 			}
 		}
 	}
-	for (int i = 0; i < 6; ++i) {
+	
+	data = 0x02; //en bit es 00000010
+	//el segundo LED (contando desde la derecha) esta encendido, mientras que los demas LEDs estan apagados.
+	
+	for (int i = 0; i < 6; ++i) { //se utiliza para inciar una secuencia de luces desde un estado especifico
 		printf("Presione ESC para volver al menu principal\n");
 		printf("Delay: %d\n", speed);
-		mostrar(dato);
-		dato <<= 1;
+		mostrar(data);
+		data <<= 1; //el valor de data se desplaza hacia la izquierda (<<= 1), lo que hace que la secuencia de luces se desplace de un LED encendido al siguiente en cada iteracion
 		retardo(speed);
 		system("cls");
 		
