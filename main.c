@@ -105,7 +105,8 @@ int main() {
 	return 0;
 }
 
-//Funciones
+
+//FUNCIONES
 
 void retardo(unsigned long int a){ 
 	//"unsigned long int" (representa un número entero sin signo y generalmente ocupa 4 bytes en la memoria). La función no devuelve ningún valor (void).
@@ -134,7 +135,7 @@ void autoFantastico(unsigned long int speed) {
 	while (1) { //while(1) es para que se haga indefinidamente hasta que se cumpla la condicion de salida
 		for (int i = 0; i < 8; ++i) {
 			printf("Presione ESC para volver al menu principal\n");
-			printf("Delay: %d\n", speed);
+			printf("Delay: %lu\n", speed);
 			mostrar(data);
 			data >>= 1; //se desplaza el bit de dato un valor a la derecha
 			retardo(speed);
@@ -162,7 +163,7 @@ void autoFantastico(unsigned long int speed) {
 	
 	for (int i = 0; i < 6; ++i) { //se utiliza para inciar una secuencia de luces desde un estado especifico
 		printf("Presione ESC para volver al menu principal\n");
-		printf("Delay: %d\n", speed);
+		printf("Delay: %lu\n", speed); //se usa %lu para unsigned long
 		mostrar(data);
 		data <<= 1; //el valor de data se desplaza hacia la izquierda (<<= 1), lo que hace que la secuencia de luces se desplace de un LED encendido al siguiente en cada iteracion
 		retardo(speed);
@@ -179,14 +180,61 @@ void autoFantastico(unsigned long int speed) {
 		}
 		
 		if (GetAsyncKeyState(VK_ESCAPE) & 0x0001) {
-			return 0;
+			return;
+		}
+	}
+}
+
+void carrera(unsigned long int speed) {
+	//uint8_t es un array de enteros sin signo con 8 bits
+	//el array se inicializa con los valores entre {}
+	uint8_t tabla[] = {
+		0x80, 0x80, 0x40, 0x40, 0x20, 0x20,
+			0x10, 0x10, 0x88, 0x48, 0x24, 0x14,
+			0x0A, 0x06, 0x03, 0x01
+	};
+	//0x80 (binario: 10000000): Enciende el LED mas a la izquierda.
+	//0x40 (binario: 01000000): Enciende el segundo LED desde la izquierda.
+	//0x20 (binario: 00100000): Enciende el tercer LED desde la izquierda.
+	//0x10 (binario: 00010000): Enciende el cuarto LED desde la izquierda.
+	//0x88 (binario: 10001000): Enciende el primer y el quinto LED desde la izquierda.
+	//0x48 (binario: 01001000): Enciende el segundo y el quinto LED desde la izquierda.
+	//0x24 (binario: 00100100): Enciende el tercer y el quinto LED desde la izquierda.
+	//0x14 (binario: 00010100): Enciende el cuarto y el quinto LED desde la izquierda.
+	//0x0A (binario: 00001010): Enciende el tercer y el sexto LED desde la izquierda.
+	//0x06 (binario: 00000110): Enciende el cuarto y el quinto LED desde la izquierda.
+	//0x03 (binario: 00000011): Enciende el quinto y el sexto LED desde la izquierda.
+	//0x01 (binario: 00000001): Enciende el sexto LED desde la izquierda.
+	
+	while (1) {
+		for (int i = 0; i < 16; ++i) {
+			printf("Presione ESC para volver al menu principal\n");
+			printf("Delay: %lu\n", speed);
+			//%lu es un especificador de formato que se utiliza para imprimir un valor de tipo unsigned long.
+			//la l indica que el argumento es de tipo unsigned long, y u indica que el valor se debe imprimir como un numero sin signo.
+			//\n representa un salto de l�nea, para que la siguiente salida aparezca en una nueva l�nea.
+			mostrar(tabla[i]);
+			retardo(speed);
+			system("cls"); //limpia la consola
+			
+			if ((speed - 5000000) > 1000000) {
+				if (GetAsyncKeyState(VK_UP) & 0x0001) {
+					speed -= 5000000;
+				}
+			}
+			
+			if (GetAsyncKeyState(VK_DOWN) & 0x0001) {
+				speed += 5000000;
+			}
+			
+			if (GetAsyncKeyState(VK_ESCAPE) & 0x0001) {
+				return;
+			}
 		}
 	}
 }
 
 void choque(unsigned long int speed) {//Esto define la función choque que toma un parámetro "speed" de tipo "unsigned long int".
-    
-	  
   // Se define un arreglo llamado "tabla" que contiene una secuencia de valores en formato hexadecimal. 
   //Estos valores representan los patrones de luces que se mostrarán durante el efecto de choque.
 
@@ -223,7 +271,7 @@ void choque(unsigned long int speed) {//Esto define la función choque que toma 
         }
 	}
 }
-}
+
 
 
 
