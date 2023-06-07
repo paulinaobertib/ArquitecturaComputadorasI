@@ -4,8 +4,9 @@
 #include <string.h>
 
 //funciones pedidas
+void retardo(unsigned long int);
+void mostrar(unsigned char);
 void autoFantastico(unsigned long int);
-void retardo (unsigned long int);
 
 int main() {
 	//en c se pone la cantidad que queremos + 1 porque el ultimo es un espacio vacio
@@ -100,6 +101,28 @@ int main() {
 	return 0;
 }
 
+//Funciones
+
+void retardo(unsigned long int a){ 
+	//"unsigned long int" (representa un número entero sin signo y generalmente ocupa 4 bytes en la memoria). La función no devuelve ningún valor (void).
+	
+	//Bucle de a que se ejecuta siempre que a sea distinto de cero
+	//En cada iteración del bucle, se decrementa el valor de "a" en 1
+	while (a) a--;
+}
+	
+void mostrar(unsigned char data) {
+	//mask representa una mascara de bits que se utiliza para verificar el estado de cada bit en el valor de dato
+	for (unsigned char mask = 128; mask > 0; mask >>= 1) { //128=10000000 en binario
+		//En cada iteracion, mask se desplaza un bit hacia la derecha mediante el operador de desplazamiento a la derecha (>>=).
+		if (data & mask) { //En cada iteracion del bucle, se verifica si el bit correspondiente en dato esta activo (1) utilizando la operacion de bitwise AND (&) con mask. Si el resultado es verdadero, se imprime *, de lo contrario se imprime _.
+			printf("*");
+		} else {
+			printf("_");
+		}
+	}
+}
+
 void autoFantastico(unsigned long int speed) {
 	unsigned int data = 0x80; //declaramos un entero sin signo. 0x80 en binario es 10000000
 	//Cada digito binario representa un LED individual y el digito mas significativo (el de la izquierda) representa el primer LED.
@@ -130,7 +153,7 @@ void autoFantastico(unsigned long int speed) {
 		}
 	}
 	
-	data = 0x02; //en bit es 00000010
+	data = 0x02; //en binario es 00000010
 	//el segundo LED (contando desde la derecha) esta encendido, mientras que los demas LEDs estan apagados.
 	
 	for (int i = 0; i < 6; ++i) { //se utiliza para inciar una secuencia de luces desde un estado especifico
@@ -155,15 +178,6 @@ void autoFantastico(unsigned long int speed) {
 			return 0;
 		}
 	}
-}
-
-void retardo(unsigned long int a){ 
-//"unsigned long int" (representa un número entero sin signo y generalmente ocupa 4 bytes en la memoria). La función no devuelve ningún valor (void).
-
-	//Bucle de a que se ejecuta siempre que a sea distinto de cero
-	//En cada iteración del bucle, se decrementa el valor de "a" en 1
-    while (a) a--;
-
 }
 
 
