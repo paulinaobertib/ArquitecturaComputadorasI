@@ -3,6 +3,9 @@
 #include <conio.h>
 #include <string.h>
 
+//funciones pedidas
+void autoFantastico(unsigned long int);
+
 int main() {
 	//en c se pone la cantidad que queremos + 1 porque el ultimo es un espacio vacio
 	const int MAX_ATTEMPTS = 3; //numero maximo de intentos
@@ -93,8 +96,60 @@ int main() {
 		printf("\n");
 	} while (menuOption != 6);
 	
-	
 	return 0;
+}
+
+void autoFantastico(unsigned long int speed) {
+	unsigned int data = 0x80; //declaramos un entero sin signo. 0x80 en binario es 10000000
+	//Cada digito binario representa un LED individual y el digito mas significativo (el de la izquierda) representa el primer LED.
+	//es decir, solo el primer LED esta encendido
+	while (1) { //while(1) es para que se haga indefinidamente hasta que se cumpla la condicion de salida
+		for (int i = 0; i < 8; ++i) {
+			printf("Presione ESC para volver al menu principal\n");
+			printf("Delay: %d\n", speed);
+			mostrar(dato);
+			dato >>= 1; //se desplaza el bit de dato un valor a la derecha
+			retardo(speed);
+			system("cls"); //limpia la consola
+			
+			if ((speed - 5000000) > 1000000) {
+				if (GetAsyncKeyState(VK_UP) & 0x0001) { //se verifica si estamos tocando la tecla hacia arriba (VK_UP)
+					//bit 0x0001 indica si la tecla esta siendo presionada
+					speed -= 5000000;
+				}
+			}
+			
+			if (GetAsyncKeyState(VK_DOWN) & 0x0001) {
+				speed += 5000000;
+			}
+			
+			if (GetAsyncKeyState(VK_ESCAPE) & 0x0001) { //si tocamos escape se termina el programa
+				return;
+			}
+		}
+	}
+	for (int i = 0; i < 6; ++i) {
+		printf("Presione ESC para volver al menu principal\n");
+		printf("Delay: %d\n", speed);
+		mostrar(dato);
+		dato <<= 1;
+		retardo(speed);
+		system("cls");
+		
+		if ((speed - 5000000) > 1000000) {
+			if (GetAsyncKeyState(VK_UP) & 0x0001) {
+				speed -= 5000000;
+			}
+		}
+		
+		if (GetAsyncKeyState(VK_DOWN) & 0x0001) {
+			speed += 5000000;
+		}
+		
+		if (GetAsyncKeyState(VK_ESCAPE) & 0x0001) {
+			return 0;
+		}
+	}
 }
 
 
