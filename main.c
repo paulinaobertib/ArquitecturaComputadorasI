@@ -4,17 +4,26 @@
 #include <string.h>
 #include <stdint.h> //libreria para usar el uint8_t 
 #include <windows.h> //libreria para usar las teclas de flechas
+#include "EasyPIO.h"
 
+//funcion para inicializar EASY PIO
+void pinSetup(void);
 //funciones pedidas
 void retardo(unsigned long int);
 void mostrar(unsigned char);
+//funcion para controlar un conjunto de LEDs 
+void ledShow(unsigned char);
+//funciones de las consignas
 void autoFantastico(unsigned long int);
 void carrera(unsigned long int);
 void choque(unsigned long int);
+//funciones hechas extras
 void efectoPulso(unsigned long int);
 void cargandoBateria(unsigned long int);
 
 int main() {
+	//EASY PIO
+	pinSetup();
 	//en c se pone la cantidad que queremos + 1 porque el ultimo es un espacio vacio
 	const int MAX_ATTEMPTS = 3; //numero maximo de intentos
 	const int PASSWORD_LENGTH = 5; //longitud maxima de la password
@@ -136,9 +145,17 @@ int main() {
 
 //FUNCIONES
 
+void pinSetup(void) { //realiza la configuracion inicial de los pines utilizados para controlar los LEDs
+	pioInit();
+	for (int i = 0; i < 8; i++) { //lo tenemos que hacer hasta 8 porque tenemos 8 LEDs
+		//pinMode es una funcion para establecer si un pin es de entrada (INPUT) o de salida (OUTPUT)
+		pinMode(led[i], OUTPUT); //led[i] representa el numero del pin actual dentro del bucle
+		//ponemos OUTPUT porque lo establecemos al modo de pin como de salida
+	}
+}
+
 void retardo(unsigned long int a){ 
 	//"unsigned long int" (representa un nÃºmero entero sin signo y generalmente ocupa 4 bytes en la memoria). La funciÃ³n no devuelve ningÃºn valor (void).
-	
 	//Bucle de a que se ejecuta siempre que a sea distinto de cero
 	//En cada iteraciÃ³n del bucle, se decrementa el valor de "a" en 1
 	while (a) a--;
@@ -156,14 +173,26 @@ void mostrar(unsigned char data) {
 	}
 }
 
+void ledShow(unsigned char data) {
+	for (int i=0;i<8; i++) { //lo hacemos hasta 8 porque estamos controlando 8 leds en total
+		digitalWrite(led[i], (data >> i) & 1); //la funcion digitalWrite se utiliza para establecer el estado de cada LED individual
+		//led[j] representa el número del pin del LED actual dentro del bucle
+		//data >> i es un desplazamiento hacia la derecha
+		//se realiza una operacion AND (&) con el numero 1 para obtener el bit mas bajo del resultado del desplazamiento
+	}
+}
+
 void autoFantastico(unsigned long int speed) {
-	unsigned int data = 0x80; //declaramos un entero sin signo. 0x80 en binario es 10000000
+	unsigned char data = 0x80; //declaramos un entero sin signo. 0x80 en binario es 10000000
 	//Cada digito binario representa un LED individual y el digito mas significativo (el de la izquierda) representa el primer LED.
 	//es decir, solo el primer LED esta encendido
 	while (1) { //while(1) es para que se haga indefinidamente hasta que se cumpla la condicion de salida
 		for (int i = 0; i < 8; ++i) {
 			printf("Presione ESC para volver al menu principal\n");
+			printf("Presione KEY UP para desacelerar\n");
+			printf("Presione KEY DOWN para acelerar\n");
 			printf("Delay: %lu\n", speed);
+			ledShow(data);
 			mostrar(data);
 			data >>= 1; //se desplaza el bit de dato un valor a la derecha
 			retardo(speed);
@@ -184,31 +213,32 @@ void autoFantastico(unsigned long int speed) {
 				return;
 			}
 		}
-	}
 	
-	data = 0x02; //en binario es 00000010
-	//el segundo LED (contando desde la derecha) esta encendido, mientras que los demas LEDs estan apagados.
-	
-	for (int i = 0; i < 6; ++i) { //se utiliza para inciar una secuencia de luces desde un estado especifico
-		printf("Presione ESC para volver al menu principal\n");
-		printf("Delay: %lu\n", speed); //se usa %lu para unsigned long
-		mostrar(data);
-		data <<= 1; //el valor de data se desplaza hacia la izquierda (<<= 1), lo que hace que la secuencia de luces se desplace de un LED encendido al siguiente en cada iteracion
-		retardo(speed);
-		system("cls");
+		data = 0x02; //en binario es 00000010
+		//el segundo LED (contando desde la derecha) esta encendido, mientras que los demas LEDs estan apagados.
 		
-		if ((speed - 5000000) > 1000000) {
-			if (GetAsyncKeyState(VK_UP) & 0x0001) {
-				speed -= 5000000;
+		for (int i = 0; i < 6; ++i) { //se utiliza para inciar una secuencia de luces desde un estado especifico
+			printf("Presione ESC para volver al menu principal\n");
+			printf("Delay: %lu\n", speed); //se usa %lu para unsigned long
+			ledShow(data);
+			mostrar(data);
+			data <<= 1; //el valor de data se desplaza hacia la izquierda (<<= 1), lo que hace que la secuencia de luces se desplace de un LED encendido al siguiente en cada iteracion
+			retardo(speed);
+			system("cls");
+			
+			if ((speed - 5000000) > 1000000) {
+				if (GetAsyncKeyState(VK_UP) & 0x0001) {
+					speed -= 5000000;
+				}
 			}
-		}
-		
-		if (GetAsyncKeyState(VK_DOWN) & 0x0001) {
-			speed += 5000000;
-		}
-		
-		if (GetAsyncKeyState(VK_ESCAPE) & 0x0001) {
-			return;
+			
+			if (GetAsyncKeyState(VK_DOWN) & 0x0001) {
+				speed += 5000000;
+			}
+			
+			if (GetAsyncKeyState(VK_ESCAPE) & 0x0001) {
+				return;
+			}
 		}
 	}
 }
@@ -237,10 +267,13 @@ void carrera(unsigned long int speed) {
 	while (1) {
 		for (int i = 0; i < 16; ++i) {
 			printf("Presione ESC para volver al menu principal\n");
+			printf("Presione KEY UP para desacelerar\n");
+			printf("Presione KEY DOWN para acelerar\n");
 			printf("Delay: %lu\n", speed);
 			//%lu es un especificador de formato que se utiliza para imprimir un valor de tipo unsigned long.
 			//la l indica que el argumento es de tipo unsigned long, y u indica que el valor se debe imprimir como un numero sin signo.
-			//\n representa un salto de línea, para que la siguiente salida aparezca en una nueva línea.
+			//\n representa un salto de linea, para que la siguiente salida aparezca en una nueva linea.
+			ledShow(tabla[i]);
 			mostrar(tabla[i]);
 			retardo(speed);
 			system("cls"); //limpia la consola
@@ -282,7 +315,10 @@ void choque(unsigned long int speed) {//Esto define la funciÃ³n choque que toma 
 			//En cada iteraciÃ³n, se realiza una serie de acciones relacionadas con la visualizaciÃ³n del patrÃ³n de luz correspondiente.
             
 			printf("Presione ESC para volver al menu principal\n");
+			printf("Presione KEY UP para desacelerar\n");
+			printf("Presione KEY DOWN para acelerar\n");
             printf("Delay: %lu\n", speed); //Imprime el valor actual de speed en la consola, mostrando la velocidad actual del efecto de choque.
+			ledShow(tabla[i]);
             mostrar(tabla[i]); //Llama a una funcion mostrar.
             retardo(speed); //Llama a una funciÃ³n retardo. 
             system("cls"); //Limpia la consola para borrar los patrones de luces anteriores y prepararse para mostrar el siguiente patrÃ³n.
@@ -320,12 +356,13 @@ const unsigned char brightnessTable[] = {
 
 void efectoPulso(unsigned long int speed) {
 	unsigned char data = 0x01; // Todos los LEDs apagados excepto el primero
-	int brightnessIndex = 0; // Índice actual en la tabla de brillo
+	int brightnessIndex = 0; // indice actual en la tabla de brillo
 	
 	while (1) {
 		printf("Presione ESC para volver al menú principal\n");
 		printf("Delay: %lu\n", speed);
 		
+		ledShow(data);
 		mostrar(data);
 		retardo(speed);
 		system("cls"); // Limpiar la pantalla
@@ -339,13 +376,16 @@ void efectoPulso(unsigned long int speed) {
 		// Actualizar el brillo de los LEDs
 		data = brightnessTable[brightnessIndex];
 		
-		// Incrementar o reiniciar el índice de brillo
+		// Incrementar o reiniciar el indice de brillo
 		brightnessIndex = (brightnessIndex + 1) % (sizeof(brightnessTable) / sizeof(unsigned char));
+		//(sizeof(brightnessTable) / sizeof(unsigned char)) calcula el tamanio total de la tabla de brillo (brightnessTable) dividiendo el tamanio total de la tabla en bytes (sizeof(brightnessTable)) 
+		//por el tamanio en bytes de cada elemento de la tabla (sizeof(unsigned char)). Esto da como resultado el numero total de elementos en la tabla de brillo.
+		//el operador % calcula el residuo de la division entre (brightnessIndex + 1) y el numero total de elementos en la tabla de brillo. Esto asegura que el indice se mantenga dentro de los limites validos de la tabla.
 	}
 }
 
 void cargandoBateria(unsigned long int speed) {
-	unsigned char data = 0x00; // Todos los LEDs apagados excepto el primero
+	unsigned char data = 0x00; // todos los LEDs apagados excepto el primero
 	//0xFF inicializa todos prendidos
 	
 	while (1) {
@@ -355,6 +395,7 @@ void cargandoBateria(unsigned long int speed) {
 			//0xFF representa el valor binario 11111111. Este valor tiene todos los bits activados, lo que significa que todos los LEDs estarían encendidos.
 			//>> es el operador de desplazamiento a la derecha. Cuando se aplica a 0xFF, desplaza todos los bits hacia la derecha en función del valor de i. En cada iteración, i aumenta, lo que resulta en un desplazamiento mayor y, por lo tanto, en la activacion gradual de los LEDs.
 			//data | (0xFF >> i) realiza una operacion de OR bit a bit entre data y el resultado del desplazamiento. Esto enciende los LEDs anteriores y el siguiente LED en cada iteracion.
+			ledShow(data);
 			mostrar(data | (0xFF >> i)); // Encender LEDs anteriores y el siguiente LED
 			retardo(speed);
 			system("cls"); // Limpiar la pantalla
