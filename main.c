@@ -5,12 +5,19 @@
 #include <stdint.h> //libreria para usar el uint8_t 
 #include <windows.h> //libreria para usar las teclas de flechas
 
+// Tabla con los patrones de brillo
+const unsigned char brightnessTable[] = {
+	0x01, 0x03, 0x07, 0x0F, 0x1F, 0x3F, 0x7F, 0xFF,
+		0x7F, 0x3F, 0x1F, 0x0F, 0x07, 0x03, 0x01, 0x00
+};
+
 //funciones pedidas
 void retardo(unsigned long int);
 void mostrar(unsigned char);
 void autoFantastico(unsigned long int);
 void carrera(unsigned long int);
 void choque(unsigned long int);
+void efectoPulso(unsigned long int speed);
 void cargandoBateria(unsigned long int);
 
 int main() {
@@ -70,8 +77,8 @@ int main() {
 		printf("1. Auto Fantastico\n");
 		printf("2. Carrera\n");
 		printf("3. Choque\n");
-		printf("4. Elegida1\n");
-		printf("5. Elegida2\n");
+		printf("4. Efecto pulso\n");
+		printf("5. Cargando bateria\n");
 		printf("6. Salir\n");
 		printf("Ingrese una opcion: ");
 		//scanf es para leer la entrada de usuario desde la consola
@@ -102,7 +109,11 @@ int main() {
 			speed = speedini;
 			break;
 		case 4:
-			printf("Elegida1\n");
+			printf("Efecto pulso\n");
+			system("cls");
+			efectoPulso(speed);
+			menuOption = 0;
+			speed = speedini;
 			break;
 		case 5:
 			printf("Cargando bateria\n");
@@ -299,6 +310,31 @@ void choque(unsigned long int speed) {//Esto define la funciÃ³n choque que toma 
 	}
 }
 
+void efectoPulso(unsigned long int speed) {
+	unsigned char data = 0x01; // Todos los LEDs apagados excepto el primero
+	int brightnessIndex = 0; // Índice actual en la tabla de brillo
+	
+	while (1) {
+		printf("Presione ESC para volver al menú principal\n");
+		printf("Delay: %lu\n", speed);
+		
+		mostrar(data);
+		retardo(speed);
+		system("cls"); // Limpiar la pantalla
+		
+		//Se verifica si la tecla ESC ha sido presionada utilizando GetAsyncKeyState(VK_ESCAPE) & 0x0001. 
+		//Si es así, la función return se ejecuta, lo que permite salir del bucle y finalizar la función.
+		if (GetAsyncKeyState(VK_ESCAPE) & 0x0001) {
+			return;
+		}
+		
+		// Actualizar el brillo de los LEDs
+		data = brightnessTable[brightnessIndex];
+		
+		// Incrementar o reiniciar el índice de brillo
+		brightnessIndex = (brightnessIndex + 1) % (sizeof(brightnessTable) / sizeof(unsigned char));
+	}
+}
 void cargandoBateria(unsigned long int speed) {
 	unsigned char data = 0x00; // Todos los LEDs apagados excepto el primero
 	//0xFF inicializa todos prendidos
