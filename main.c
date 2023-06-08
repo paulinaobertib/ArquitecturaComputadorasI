@@ -5,19 +5,13 @@
 #include <stdint.h> //libreria para usar el uint8_t 
 #include <windows.h> //libreria para usar las teclas de flechas
 
-// Tabla con los patrones de brillo
-const unsigned char brightnessTable[] = {
-	0x01, 0x03, 0x07, 0x0F, 0x1F, 0x3F, 0x7F, 0xFF,
-		0x7F, 0x3F, 0x1F, 0x0F, 0x07, 0x03, 0x01, 0x00
-};
-
 //funciones pedidas
 void retardo(unsigned long int);
 void mostrar(unsigned char);
 void autoFantastico(unsigned long int);
 void carrera(unsigned long int);
 void choque(unsigned long int);
-void efectoPulso(unsigned long int speed);
+void efectoPulso(unsigned long int);
 void cargandoBateria(unsigned long int);
 
 int main() {
@@ -310,6 +304,20 @@ void choque(unsigned long int speed) {//Esto define la funci√≥n choque que toma 
 	}
 }
 
+// Tabla con los patrones de brillo
+const unsigned char brightnessTable[] = {
+	0x01, 0x03, 0x07, 0x0F, 0x1F, 0x3F, 0x7F, 0xFF,
+		0x7F, 0x3F, 0x1F, 0x0F, 0x07, 0x03, 0x01, 0x00
+};
+//0x01 (binario: 00000001): Este valor enciende el LED mas a la derecha.
+//0x03 (binario: 00000011): Este valor enciende los dos LEDs mas a la derecha.
+//0x07 (binario: 00000111): Este valor enciende los tres LEDs mas a la derecha.
+//0x0F (binario: 00001111): Este valor enciende los cuatro LEDs mas a la derecha.
+//0x1F (binario: 00011111): Este valor enciende los cinco LEDs mas a la derecha.
+//0x3F (binario: 00111111): Este valor enciende los seis LEDs mas a la derecha.
+//0x7F (binario: 01111111): Este valor enciende los siete LEDs mas a la derecha.
+//0xFF (binario: 11111111): Este valor enciende todos los LEDs.
+
 void efectoPulso(unsigned long int speed) {
 	unsigned char data = 0x01; // Todos los LEDs apagados excepto el primero
 	int brightnessIndex = 0; // Õndice actual en la tabla de brillo
@@ -335,6 +343,7 @@ void efectoPulso(unsigned long int speed) {
 		brightnessIndex = (brightnessIndex + 1) % (sizeof(brightnessTable) / sizeof(unsigned char));
 	}
 }
+
 void cargandoBateria(unsigned long int speed) {
 	unsigned char data = 0x00; // Todos los LEDs apagados excepto el primero
 	//0xFF inicializa todos prendidos
