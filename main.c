@@ -307,6 +307,9 @@ void cargandoBateria(unsigned long int speed) {
 		for (int i = 0; i < 8; ++i) { // Cambiado de 9 a 8
 			printf("Presione ESC para volver al menu principal\n");
 			printf("Delay: %lu\n", speed);
+			//0xFF representa el valor binario 11111111. Este valor tiene todos los bits activados, lo que significa que todos los LEDs estarían encendidos.
+			//>> es el operador de desplazamiento a la derecha. Cuando se aplica a 0xFF, desplaza todos los bits hacia la derecha en función del valor de i. En cada iteración, i aumenta, lo que resulta en un desplazamiento mayor y, por lo tanto, en la activacion gradual de los LEDs.
+			//data | (0xFF >> i) realiza una operacion de OR bit a bit entre data y el resultado del desplazamiento. Esto enciende los LEDs anteriores y el siguiente LED en cada iteracion.
 			mostrar(data | (0xFF >> i)); // Encender LEDs anteriores y el siguiente LED
 			retardo(speed);
 			system("cls"); // Limpiar la pantalla
