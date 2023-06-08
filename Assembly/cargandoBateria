@@ -7,7 +7,7 @@ CargandoBateria
 				STMFD	SP!, {r4, r5, r6, r7, LR}	; Guarda los registros r4, r5, r6, r7 y LR en la pila
 				
 				MOV		r6, r0		; Guarda el valor del registro r0 en r6. Este valor fue pasado como parámetro.
-				MOV		r4, #0x00	; Mueve el valor 0x00 al registro r4. Esto representa el número binario 11111111.
+				MOV		r4, #0x00		; Mueve el valor 0x00 al registro r4. Esto representa el número binario 11111111.
 				MOV		r5, #8		; Mueve el valor 8 al registro r5. Este será nuestro contador.
 				
 ForCargandoBateria
