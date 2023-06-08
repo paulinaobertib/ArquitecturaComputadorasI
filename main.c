@@ -11,6 +11,7 @@ void mostrar(unsigned char);
 void autoFantastico(unsigned long int);
 void carrera(unsigned long int);
 void choque(unsigned long int);
+void cargandoBateria(unsigned long int);
 
 int main() {
 	//en c se pone la cantidad que queremos + 1 porque el ultimo es un espacio vacio
@@ -20,6 +21,9 @@ int main() {
 	char inputPassword[PASSWORD_LENGTH + 1]; //password ingresada por el usuario
 	int attempt; //para contar los intentos
 	int menuOption; //aca guardamos la opcion elegida por el usuario del menu
+	unsigned long int speedini = 151000000; //esta variable representa la velocidad inicial de la secuencia de encendido de los LEDs
+	unsigned long int speed = speedini; // 1000000 //Esto se hace para tener una variable speed que se pueda modificar durante la ejecucion del programa sin alterar el valor original de speedini. Inicialmente, speed tendrá el mismo valor que speedini.
+	retardo(380000000); //es el tiempo de retardo especificado en algun tipo de unidad de tiempo.
 	
 	for (attempt = 0; attempt < MAX_ATTEMPTS; attempt++) { //ciclo for para los intentos de la password
 		printf("Ingrese su password de 5 digitos: "); //printf para mostrar por consola
@@ -78,24 +82,43 @@ int main() {
 		switch (menuOption) {
 		case 1:
 			printf("Auto Fantastico\n");
+			system("cls");
+			autoFantastico(speed);
+			menuOption = 0;
+			speed = speedini;
 			break;
 		case 2:
 			printf("Carrera\n");
+			system("cls");
+			carrera(speed);
+			menuOption = 0;
+			speed = speedini;
 			break;
 		case 3:
 			printf("Choque\n");
+			system("cls");
+			choque(speed);
+			menuOption = 0;
+			speed = speedini;
 			break;
 		case 4:
 			printf("Elegida1\n");
 			break;
 		case 5:
-			printf("Elegida2\n");
+			printf("Cargando bateria\n");
+			system("cls");
+			cargandoBateria(speed);
+			menuOption = 0;
+			speed = speedini;
 			break;
 		case 6:
+			system("cls");
 			printf("Adios\n");
 			break;
 		default:
+			system("cls");
 			printf("Has seleccionado una opcion no disponible en el menu, intentalo de nuevo.\n");
+			menuOption = 0;
 			break;
 		}
 		
@@ -273,5 +296,36 @@ void choque(unsigned long int speed) {//Esto define la funciÃ³n choque que toma 
                 return;
             }
         }
+	}
+}
+
+void cargandoBateria(unsigned long int speed) {
+	unsigned char data = 0x00; // Todos los LEDs apagados excepto el primero
+	//0xFF inicializa todos prendidos
+	
+	while (1) {
+		for (int i = 0; i < 8; ++i) { // Cambiado de 9 a 8
+			printf("Presione ESC para volver al menu principal\n");
+			printf("Delay: %lu\n", speed);
+			mostrar(data | (0xFF >> i)); // Encender LEDs anteriores y el siguiente LED
+			retardo(speed);
+			system("cls"); // Limpiar la pantalla
+			
+			if ((speed - 5000000) > 1000000) {
+				if (GetAsyncKeyState(VK_UP) & 0x0001) {
+					speed -= 5000000;
+				}
+			}
+			
+			if (GetAsyncKeyState(VK_DOWN) & 0x0001) {
+				speed += 5000000;
+			}
+			
+			if (GetAsyncKeyState(VK_ESCAPE) & 0x0001) {
+				return;
+			}
+		}
+		
+		data = 0x00; // Apagar todos los LEDs
 	}
 }
