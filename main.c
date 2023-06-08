@@ -241,7 +241,11 @@ void choque(unsigned long int speed) {//Esto define la función choque que toma 
 	uint8_t tabla[] = {
         0x81, 0x42, 0x24, 0x18, 0x18, 0x24, 0x42
     };
-
+	//0x81 (binario: 10000001): Este valor enciende el LED mas a la izquierda y el septimo LED desde la izquierda.
+	//0x42 (binario: 01000010): Este valor enciende el segundo y el sexto LED desde la izquierda.
+	//0x24 (binario: 00100100): Este valor enciende el tercer y el quinto LED desde la izquierda.
+	//0x18 (binario: 00011000): Este valor enciende el cuarto y el quinto LED desde la izquierda.
+	
     while (1) { //Esto inicia un bucle infinito que controla la ejecución del efecto de choque. 
 				//El bucle se repetirá continuamente hasta que se detenga manualmente o se cumpla alguna condición de salida.
         
@@ -271,7 +275,3 @@ void choque(unsigned long int speed) {//Esto define la función choque que toma 
         }
 	}
 }
-
-
-
-
