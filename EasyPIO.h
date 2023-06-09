@@ -944,10 +944,11 @@ void pwmInit() {
     PWM_CTLbits.PWEN1 = 1;  // Enable pwm
 }
 
-/**
+/*
  * dut is a value between 0 and 1
  * freq is pwm frequency in Hz
  */
+
 void setPWM(float freq, float dut) {
     PWM_RNG1 = (int)(CM_FREQUENCY / freq);
     PWM_DAT1 = (int)(dut * (CM_FREQUENCY / freq));
@@ -958,3 +959,4 @@ void analogWrite(int val) {
 }
 
 #endif
+

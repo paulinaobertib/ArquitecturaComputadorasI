@@ -1,10 +1,11 @@
+#include <ncurses.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <conio.h>
 #include <string.h>
 #include <stdint.h> //libreria para usar el uint8_t 
-#include <windows.h> //libreria para usar las teclas de flechas
 #include "EasyPIO.h"
+
+
 
 //funcion para inicializar EASY PIO
 void pinSetup(void);
