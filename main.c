@@ -8,6 +8,7 @@
 
 const char led[] = {14, 15, 18, 23, 24, 25, 8, 7}; //puertos de los leds
 int delay = 10;
+int salir;
 
 //funciones pedidas
 int retardo(int);
@@ -189,7 +190,8 @@ int teclas(int a) {
 void mostrar(unsigned char data) {
 	initscr();
 	
-	int t; 
+	int t;
+	int i;
 	for (t = 7; t >= 0; --t) {
 		char simboloConsola;
 		int prendidoApagadoLed;
@@ -208,7 +210,7 @@ void mostrar(unsigned char data) {
 	printw("\r");
 	fflush(stdout);
 	endwin();
-	}
+
 }
 
 //funciones pedidas
@@ -265,6 +267,7 @@ void efectoPulso() {
 	
 void cargandoBateria() {
 	
+	int i;
 	unsigned char tablaCargandoBateria[] = {
 		0x00, 0x80, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC, 0xFE, 0xFF
 	};
