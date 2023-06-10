@@ -9,24 +9,17 @@
 const char led[] = {14, 15, 18, 23, 24, 25, 8, 7}; //puertos de los leds
 int delay = 10;
 
-
-//--------------------------------------------------------------------------
-// DECLARAMOS FUNCIONES
-
 //funciones pedidas
 int retardo(int);
 int teclas(int); 
 void mostrar(unsigned char); //muestra tanto por consola y en el led
-
 //funciones de las consignas
 void autoFantastico();
 void choque();
-
 //funciones hechas extras
 void efectoPulso();
 void cargandoBateria();
 
-//--------------------------------------------------------------------------
 
 int main() {
 	pioInit(); //inicia easypio
@@ -38,7 +31,6 @@ int main() {
 		pinMode(led[i], OUTPUT); //led[i] representa el numero del pin actual dentro del bucle
 		//ponemos OUTPUT porque lo establecemos al modo de pin como de salida
 	}
-	
 	
 	//en c se pone la cantidad que queremos + 1 porque el ultimo es un espacio vacio
 	int attempts = 3; //para contar los intentos
@@ -145,11 +137,6 @@ int main() {
 	return 0;
 }
 
-
-//--------------------------------------------------------------------------
-//FUNCIONES
-
-//funciones retardo
 int retardo(int n) {
 	if (delay < 50) {
 		if (n == 0) {
@@ -198,7 +185,7 @@ int teclas(int a) {
 	return a;
 }
 
-//funcion mostrar, por consola y por led
+//mostrar es por consola y por led
 void mostrar(unsigned char data) {
 	initscr();
 	
@@ -286,8 +273,6 @@ void cargandoBateria() {
 		delay = teclas(delay);
 	}
 }
-
-//--------------------------------------------------------------------------
 
 
 	
