@@ -17,6 +17,7 @@ void mostrar(unsigned char); //muestra tanto por consola y en el led
 //funciones de las consignas
 void autoFantastico();
 void choque();
+void carrera();
 //funciones hechas extras
 void efectoPulso();
 void cargandoBateria();
@@ -90,9 +91,10 @@ int main() {
 		printw("---- MENU ----\n");
 		printw("1. Auto Fantastico\n");
 		printw("2. Choque\n");
-		printw("3. Efecto pulso\n");
-		printw("4. Cargando bateria\n");
-		printw("5. Salir\n");
+		printw("3. Carrera\n");
+		printw("4. Efecto pulso\n");
+		printw("5. Cargando bateria\n");
+		printw("6. Salir\n");
 		printw("Ingrese una opcion: ");
 		refresh(); //actualiza y muestra los cambios en la pantalla despu�s de realizar modificaciones en las ventanas utilizando las funciones de ncurses.
 		echo(); //activa la retroalimentaci�n autom�tica de entrada en la pantalla.
@@ -113,16 +115,21 @@ int main() {
 			choque();
 			break;
 		case 3:
+			printw("Carrera\n");
+			refresh();
+			carrera();
+			break;
+		case 4:
 			printw("Efecto pulso\n");
 			refresh();
 			efectoPulso();
 			break;
-		case 4:
+		case 5:
 			printw("Cargando bateria\n");
 			refresh();
 			cargandoBateria();
 			break;
-		case 5:
+		case 6:
 			printw("Adios\n");
 			refresh();
 			break;
@@ -231,7 +238,6 @@ void autoFantastico() {
 }
 	
 void choque() {
-	
 	int i;
 	unsigned char tablaChoque[] = {
 		0x81, 0x42, 0x24, 0x18, 0x18, 0x24, 0x42, 0x81,
@@ -247,6 +253,19 @@ void choque() {
 		delay = teclas(delay);
 	}
 
+}
+
+void carrera (){
+	unsigned char tablaCarrera[] = {
+		0x80, 0x80, 0x40, 0x40, 0x20, 0x20,
+			0x10, 0x10, 0x88, 0x48, 0x24, 0x14,
+			0xA, 0x6, 0x3,0x1
+	};
+	
+	for (i = 0; i < 16; i++) {
+		mostrar(tablaCarrera[i]);
+		delay = teclas(delay);
+	}
 }
 
 //funciones inventadas
