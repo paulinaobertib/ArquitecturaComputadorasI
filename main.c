@@ -175,7 +175,6 @@ int teclas(int a) {
 		endwin();
 		salir = 0;
 		clear();
-		menu();
 	}
 	for (int j = 0; j < a; j++) {
 		unsigned int i = 0x4fffff;  // raspberry 0x3fffff 
