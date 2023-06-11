@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "EasyPIO.h"
+//#include "EasyPIO.h"
 #include <ncurses.h>
 #include <sys/ioctl.h>
 #include <termios.h>
@@ -24,15 +24,15 @@ void cargandoBateria();
 
 
 int main() {
-	pioInit(); //inicia easypio
+	//pioInit(); //inicia easypio
 	initscr(); //inicia la libreria ncurses
-	
+	/*
 	int i;
 	for (i = 0; i < 8; i++) { //lo tenemos que hacer hasta 8 porque tenemos 8 LEDs
-		//pinMode es una funcion para establecer si un pin es de entrada (INPUT) o de salida (OUTPUT)
-		pinMode(led[i], OUTPUT); //led[i] representa el numero del pin actual dentro del bucle
-		//ponemos OUTPUT porque lo establecemos al modo de pin como de salida
-	}
+	//pinMode es una funcion para establecer si un pin es de entrada (INPUT) o de salida (OUTPUT)
+	pinMode(led[i], OUTPUT); //led[i] representa el numero del pin actual dentro del bucle
+	//ponemos OUTPUT porque lo establecemos al modo de pin como de salida
+	}*/
 	
 	//en c se pone la cantidad que queremos + 1 porque el ultimo es un espacio vacio
 	int attempts = 3; //para contar los intentos
@@ -47,7 +47,7 @@ int main() {
 		printw("Ingrese su password de 5 digitos: "); 
 		
 		//getch para leer el caracter sin mostrarlo en pantalla
-		for (i = 0; i < password_length; i++)
+		for (int i = 0; i < password_length; i++)
 		{
 			int c = getch();
 			
@@ -96,8 +96,8 @@ int main() {
 		printw("5. Cargando bateria\n");
 		printw("6. Salir\n");
 		printw("Ingrese una opcion: ");
-		refresh(); //actualiza y muestra los cambios en la pantalla despu�s de realizar modificaciones en las ventanas utilizando las funciones de ncurses.
-		echo(); //activa la retroalimentaci�n autom�tica de entrada en la pantalla.
+		refresh(); //actualiza y muestra los cambios en la pantalla despu?s de realizar modificaciones en las ventanas utilizando las funciones de ncurses.
+		echo(); //activa la retroalimentaci?n autom?tica de entrada en la pantalla.
 		scanw("%d", &menuOption);
 		//scanw: lee la entrada de datos del usuario desde la ventana actual
 		//%d indica el formato de entrada esperado, en este caso un entero
@@ -211,12 +211,12 @@ void mostrar(unsigned char data) {
 			prendidoApagadoLed = 0;
 		}
 		printw("%c", simboloConsola); //lo muestra por consola
-		digitalWrite(led[i], prendidoApagadoLed);  //muestra por led
+		//digitalWrite(led[i], prendidoApagadoLed);  //muestra por led
 	}
 	printw("\r");
 	fflush(stdout);
 	endwin();
-
+	
 }
 
 //funciones pedidas
@@ -236,23 +236,23 @@ void autoFantastico() {
 		delay = teclas(delay);
 	}
 }
-	
+
 void choque() {
 	int i;
 	unsigned char tablaChoque[] = {
 		0x81, 0x42, 0x24, 0x18, 0x18, 0x24, 0x42, 0x81,
 	};
-		// Se define un arreglo llamado "tabla" que contiene una secuencia de valores en formato hexadecimal. 
-		//Estos valores representan los patrones de luces que se mostrar�n durante el efecto de choque.
-		//0x81 (binario: 10000001): Este valor enciende el LED mas a la izquierda y el septimo LED desde la izquierda.
-		//0x42 (binario: 01000010): Este valor enciende el segundo y el sexto LED desde la izquierda.
-		//0x24 (binario: 00100100): Este valor enciende el tercer y el quinto LED desde la izquierda.
-		//0x18 (binario: 00011000): Este valor enciende el cuarto y el quinto LED desde la izquierda.
+	// Se define un arreglo llamado "tabla" que contiene una secuencia de valores en formato hexadecimal. 
+	//Estos valores representan los patrones de luces que se mostrar?n durante el efecto de choque.
+	//0x81 (binario: 10000001): Este valor enciende el LED mas a la izquierda y el septimo LED desde la izquierda.
+	//0x42 (binario: 01000010): Este valor enciende el segundo y el sexto LED desde la izquierda.
+	//0x24 (binario: 00100100): Este valor enciende el tercer y el quinto LED desde la izquierda.
+	//0x18 (binario: 00011000): Este valor enciende el cuarto y el quinto LED desde la izquierda.
 	for (i = 0; i < 8; i++) {
 		mostrar(tablaChoque[i]);
 		delay = teclas(delay);
 	}
-
+	
 }
 
 void carrera (){
@@ -262,29 +262,29 @@ void carrera (){
 			0xA, 0x6, 0x3,0x1
 	};
 	
-	for (i = 0; i < 16; i++) {
+	for (int i = 0; i < 16; i++) {
 		mostrar(tablaCarrera[i]);
 		delay = teclas(delay);
 	}
 }
-
-//funciones inventadas
+	
+	//funciones inventadas
 void efectoPulso() {
 	unsigned int index = 0;
 	unsigned char tablaEfectoPulso[] = { 0xFF, 0x00 }; // Tabla de control de los LEDs
 	unsigned int size = sizeof(tablaEfectoPulso) / sizeof(tablaEfectoPulso[0]);
-	
+		
 	while (1) {
 		unsigned char data = tablaEfectoPulso[index];
-		mostrar(tablaEfectoPulso);
+		mostrar(tablaEfectoPulso[index]);
 		delay = teclas(delay);
-		
+			
 		index = (index + 1) % size;
 	}
 }
 	
 void cargandoBateria() {
-	
+		
 	int i;
 	unsigned char tablaCargandoBateria[] = {
 		0x00, 0x80, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC, 0xFE, 0xFF
