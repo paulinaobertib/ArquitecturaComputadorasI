@@ -3,8 +3,8 @@
 #include <string.h>
 //#include "EasyPIO.h"
 #include <ncurses.h>
-#include <sys/ioctl.h>
-#include <termios.h>
+#include <sys/ioctl.h> //proporciona funciones y constantes para realizar operaciones de control de entrada/salida en dispositivos
+#include <termios.h> //proporciona funciones y constantes para el control de las características de la terminal, manejo de las teclas ingresadas. 
 
 const char led[] = {14, 15, 18, 23, 24, 25, 8, 7}; //puertos de los leds
 int delay = 10;
@@ -220,7 +220,6 @@ void mostrar(unsigned char data) {
 }
 
 //funciones pedidas
-
 void autoFantastico() {
 	//tabla del auto 
 	unsigned char tablaAutoFantastico[] = {
@@ -268,9 +267,9 @@ void carrera (){
 	}
 }
 	
-	//funciones inventadas
+//funciones inventadas
 void efectoPulso() {
-	unsigned int index = 0;
+	unsigned int index = 0; //index accede a los elementos de la tabla
 	unsigned char tablaEfectoPulso[] = { 0xFF, 0x00 }; // Tabla de control de los LEDs
 	unsigned int size = sizeof(tablaEfectoPulso) / sizeof(tablaEfectoPulso[0]);
 		
@@ -279,7 +278,9 @@ void efectoPulso() {
 		mostrar(tablaEfectoPulso[index]);
 		delay = teclas(delay);
 			
-		index = (index + 1) % size;
+		index = (index + 1) % size; //Incrementa el valor de index en 1 y lo asigna de nuevo a index. 
+									//Si index alcanza el tamaño de la tabla, vuelve a 0 utilizando el operador módulo (%). 
+									//Esto permite repetir el patrón de control de los LEDs.
 	}
 }
 	
