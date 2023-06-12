@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include "EasyPIO.h"
+#include "EasyPIO.h"
 #include <ncurses.h>
 #include <sys/ioctl.h> //proporciona funciones y constantes para realizar operaciones de control de entrada/salida en dispositivos
 #include <termios.h> //proporciona funciones y constantes para el control de las características de la terminal, manejo de las teclas ingresadas. 
@@ -24,15 +24,15 @@ void cargandoBateria();
 
 
 int main() {
-	//pioInit(); //inicia easypio
+	pioInit(); //inicia easypio
 	initscr(); //inicia la libreria ncurses
-	/*
+	
 	int i;
 	for (i = 0; i < 8; i++) { //lo tenemos que hacer hasta 8 porque tenemos 8 LEDs
 	//pinMode es una funcion para establecer si un pin es de entrada (INPUT) o de salida (OUTPUT)
 	pinMode(led[i], OUTPUT); //led[i] representa el numero del pin actual dentro del bucle
 	//ponemos OUTPUT porque lo establecemos al modo de pin como de salida
-	}*/
+	}
 	
 	//en c se pone la cantidad que queremos + 1 porque el ultimo es un espacio vacio
 	int attempts = 3; //para contar los intentos
@@ -211,7 +211,7 @@ void mostrar(unsigned char data) {
 			prendidoApagadoLed = 0;
 		}
 		printw("%c", simboloConsola); //lo muestra por consola
-		//digitalWrite(led[i], prendidoApagadoLed);  //muestra por led
+		digitalWrite(led[i], prendidoApagadoLed);  //muestra por led
 	}
 	printw("\r");
 	fflush(stdout);
