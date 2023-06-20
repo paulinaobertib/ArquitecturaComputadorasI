@@ -3,7 +3,7 @@
 #include <string.h>
 #include "EasyPIO.h"
 #include <ncurses.h>
-#include <sys/ioctl.h> //proporciona funciones y constantes para realizar operaciones de control de entrada/salida en dispositivos
+//#include <sys/ioctl.h> //proporciona funciones y constantes para realizar operaciones de control de entrada/salida en dispositivos
 #include <termios.h> //proporciona funciones y constantes para el control de las características de la terminal, manejo de las teclas ingresadas. 
 
 const char led[] = {14, 15, 18, 23, 24, 25, 8, 7}; //puertos de los leds
@@ -192,31 +192,17 @@ int teclas(int a) {
 	return a;
 }
 
-//mostrar es por consola y por led
-void mostrar(unsigned char data) {
-	initscr();
+//mostrar es por consola
+void mostrar(unsigned char dato){
 	
-	int t;
-	int i;
-	for (t = 7; t >= 0; --t) {
-		char simboloConsola;
-		int prendidoApagadoLed;
-		
-		if (data & (1 << i)) {
-			simboloConsola= '*';
-			prendidoApagadoLed = 1;
-			
-		} else {
-			simboloConsola = '_';
-			prendidoApagadoLed = 0;
+	for (unsigned char mask = 128; mask > 0; mask >>= 1){
+		if (dato & mask){
+			printf("*");
 		}
-		printw("%c", simboloConsola); //lo muestra por consola
-		digitalWrite(led[i], prendidoApagadoLed);  //muestra por led
+		else{
+			printf("_");
+		}
 	}
-	printw("\r");
-	fflush(stdout);
-	endwin();
-	
 }
 
 //funciones pedidas
